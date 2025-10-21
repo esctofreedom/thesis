@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stock Desk
+
+A Next.js application for tracking investment theses for your stock portfolio. Built with shadcn/ui components and a powerful TipTap rich text editor.
+
+## Features
+
+- 📊 **Stock Cards**: Visual overview of all your stocks with logos, tickers, and investment types
+- 📝 **Rich Text Editor**: Notion-like editor for documenting detailed investment theses
+- 🎨 **Beautiful UI**: Built with shadcn/ui components for a modern, clean interface
+- 🏷️ **Investment Types**: Categorize stocks by investment strategy:
+  - Short Term
+  - Long Term Appreciation
+  - Dividend Growth
+  - High Dividend
+- 🌙 **Dark Mode Support**: Full dark mode compatibility
+
+## Tech Stack
+
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **shadcn/ui** - UI component library
+- **TipTap** - Rich text editor
+- **Lucide React** - Icons
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies:**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+   ```bash
+   npm install
+   ```
+
+2. **Run the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+3. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Project Structure
+
+```
+stockdesk/
+├── app/                      # Next.js app directory
+│   ├── page.tsx             # Home page with stock cards
+│   ├── stock/[id]/          # Dynamic routes for individual stocks
+│   │   └── page.tsx         # Stock detail page with editor
+│   └── globals.css          # Global styles and TipTap editor styles
+├── components/
+│   ├── tiptap/              # TipTap editor components
+│   │   ├── editor.tsx       # Main editor component
+│   │   └── toolbar.tsx      # Editor toolbar with formatting options
+│   ├── ui/                  # shadcn/ui components
+│   └── stock-card.tsx       # Stock card component
+├── lib/
+│   ├── stocks.ts            # Stock data and utilities
+│   └── utils.ts             # Utility functions
+└── types/
+    └── stock.ts             # TypeScript type definitions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Customization
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Adding New Stocks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edit `lib/stocks.ts` to add or modify stocks:
 
-## Learn More
+```typescript
+export const stocks: Stock[] = [
+  {
+    id: "unique-id",
+    name: "Company Name",
+    ticker: "TICKER",
+    logo: "🔷", // Emoji or image URL
+    investmentType: "long-term-appreciation",
+    thesis: "",
+  },
+  // Add more stocks...
+];
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Investment Types
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Available investment types:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `short-term`
+- `long-term-appreciation`
+- `dividend-growth`
+- `high-dividend`
 
-## Deploy on Vercel
+### Editor Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The TipTap editor includes:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Text Formatting**: Bold, italic, underline, strikethrough, code
+- **Headings**: H1, H2, H3
+- **Lists**: Bulleted and numbered lists
+- **Quotes**: Blockquotes
+- **Alignment**: Left, center, right
+- **Media**: Links and images
+- **Highlighting**: Text highlighting
+- **Undo/Redo**: Full history support
+
+## Future Enhancements
+
+- [ ] Database integration for persistent storage
+- [ ] User authentication
+- [ ] Stock price integration
+- [ ] Export investment theses as PDF
+- [ ] Search and filter functionality
+- [ ] Tags and categories
+- [ ] Performance metrics tracking
+
+## License
+
+MIT
+
+## Acknowledgments
+
+- TipTap editor inspired by [tiptap-shadcn](https://github.com/ehtisham-afzal/tiptap-shadcn)
+- UI components from [shadcn/ui](https://ui.shadcn.com)

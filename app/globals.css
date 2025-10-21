@@ -1,26 +1,378 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  /* Fey/Linear inspired dark theme - sophisticated greys */
+  --background: oklch(0.11 0 0); /* Deep, rich background like Fey */
+  --foreground: oklch(0.95 0 0); /* Soft white, not harsh */
+
+  /* Cards with subtle elevation */
+  --card: oklch(0.15 0 0); /* Slightly elevated from background */
+  --card-foreground: oklch(0.95 0 0);
+
+  /* Popovers */
+  --popover: oklch(0.16 0 0);
+  --popover-foreground: oklch(0.95 0 0);
+
+  /* Primary actions - elegant grey */
+  --primary: oklch(0.88 0 0);
+  --primary-foreground: oklch(0.11 0 0);
+
+  /* Secondary elements */
+  --secondary: oklch(0.2 0 0);
+  --secondary-foreground: oklch(0.92 0 0);
+
+  /* Muted elements - beautiful grey hierarchy like Linear */
+  --muted: oklch(0.18 0 0);
+  --muted-foreground: oklch(0.58 0 0); /* Perfect readable grey */
+
+  /* Accent */
+  --accent: oklch(0.2 0 0);
+  --accent-foreground: oklch(0.92 0 0);
+
+  /* Destructive */
+  --destructive: oklch(0.65 0.22 20);
+
+  /* Borders - very subtle like Fey */
+  --border: oklch(1 0 0 / 0.08); /* Ultra-subtle borders */
+  --input: oklch(1 0 0 / 0.12);
+  --ring: oklch(0.45 0 0);
+
+  /* Charts - vibrant but refined */
+  --chart-1: oklch(0.6 0.2 270);
+  --chart-2: oklch(0.65 0.18 160);
+  --chart-3: oklch(0.7 0.16 80);
+  --chart-4: oklch(0.62 0.22 300);
+  --chart-5: oklch(0.64 0.2 25);
+
+  /* Sidebar */
+  --sidebar: oklch(0.13 0 0);
+  --sidebar-foreground: oklch(0.92 0 0);
+  --sidebar-primary: oklch(0.6 0.2 270);
+  --sidebar-primary-foreground: oklch(0.95 0 0);
+  --sidebar-accent: oklch(0.18 0 0);
+  --sidebar-accent-foreground: oklch(0.92 0 0);
+  --sidebar-border: oklch(1 0 0 / 0.08);
+  --sidebar-ring: oklch(0.45 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Smooth transitions like Fey/Linear */
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    transition: all 0.15s ease;
+  }
+
+  /* Beautiful text hierarchy */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  /* Subtle focus states */
+  *:focus-visible {
+    outline: 2px solid oklch(0.45 0 0);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* TipTap Editor Styles */
+.tiptap {
+  outline: none;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: oklch(0.45 0 0); /* Refined grey for placeholders */
+  pointer-events: none;
+  height: 0;
+}
+
+.tiptap.ProseMirror {
+  padding: 1rem;
+  min-height: 500px;
+}
+
+.tiptap h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 2.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: oklch(0.92 0 0); /* Almost white for headings */
+  letter-spacing: -0.02em;
+}
+
+.tiptap h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 2.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.875rem;
+  color: oklch(0.9 0 0); /* Almost white for headings */
+  letter-spacing: -0.02em;
+}
+
+.tiptap h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  color: oklch(0.88 0 0); /* Almost white for headings */
+  letter-spacing: -0.02em;
+}
+
+.tiptap p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.75;
+  color: oklch(0.65 0 0); /* Beautiful grey for body text */
+}
+
+.tiptap ul,
+.tiptap ol {
+  padding-left: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: oklch(0.65 0 0); /* Beautiful grey for lists */
+}
+
+.tiptap ul {
+  list-style-type: disc;
+}
+
+.tiptap ol {
+  list-style-type: decimal;
+}
+
+.tiptap li {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.tiptap blockquote {
+  border-left: 3px solid oklch(0.922 0 0);
+  padding-left: 1rem;
+  font-style: italic;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  color: oklch(0.65 0 0); /* Subtle grey for quotes */
+}
+
+.dark .tiptap blockquote {
+  border-left-color: oklch(1 0 0 / 0.15);
+  color: oklch(0.65 0 0);
+}
+
+.tiptap code {
+  background-color: oklch(0.97 0 0);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.dark .tiptap code {
+  background-color: oklch(0.2 0 0); /* Refined code background */
+  color: oklch(0.88 0 0);
+}
+
+.tiptap pre {
+  background-color: oklch(0.97 0 0);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid oklch(0.92 0 0);
+}
+
+.dark .tiptap pre {
+  background-color: oklch(0.08 0 0); /* Deeper for code blocks */
+  border: 1px solid oklch(1 0 0 / 0.1);
+}
+
+.tiptap pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.875rem;
+}
+
+.tiptap a {
+  color: oklch(0.577 0.245 264.376);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tiptap a:hover {
+  opacity: 0.8;
+}
+
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tiptap mark {
+  background-color: oklch(0.828 0.189 84.429);
+  padding: 0.125rem 0;
+  border-radius: 0.125rem;
+}
+
+.tiptap ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+}
+
+.tiptap ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.tiptap ul[data-type="taskList"] li input[type="checkbox"] {
+  margin-top: 0.375rem;
+  cursor: pointer;
+}
+
+/* React Flow Styles */
+.react-flow__node {
+  cursor: grab;
+}
+
+.react-flow__node:active {
+  cursor: grabbing;
+}
+
+.react-flow__controls {
+  @apply bg-card border border-border rounded-lg shadow-lg;
+}
+
+.react-flow__controls button {
+  @apply bg-card border-b border-border text-foreground;
+}
+
+.react-flow__controls button:hover {
+  @apply bg-muted;
+}
+
+.react-flow__controls button:last-child {
+  @apply border-b-0;
+}
+
+.react-flow__minimap {
+  @apply bg-card border border-border rounded-lg shadow-lg;
+}
+
+.react-flow__background {
+  @apply bg-background;
+}
+
+.react-flow__edge path {
+  @apply stroke-muted-foreground;
+}
+
+.react-flow__edge.selected path {
+  @apply stroke-primary;
 }
