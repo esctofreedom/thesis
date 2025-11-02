@@ -5,12 +5,13 @@ import { Stock } from "@/lib/stock-utils";
 import { StockCard } from "@/components/stock-card";
 import { StockDialog } from "@/components/stock-dialog";
 import { StockTable } from "@/components/stock-table";
+import { StockLogo } from "@/components/stock-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { CurrencyBlurToggle } from "@/components/currency-blur-toggle";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Settings, LayoutGrid, Table2 } from "lucide-react";
+import { Settings, LayoutGrid, Table2, Grid3x3 } from "lucide-react";
 import { DCFCalculatorSheet } from "@/components/dcf-calculator-sheet";
 import { useCurrencyBlur } from "@/lib/stores/currency-blur-store";
 import { formatCurrency } from "@/lib/currency";
@@ -18,7 +19,7 @@ import { formatCurrency } from "@/lib/currency";
 export default function Home() {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<"cards" | "table">("table");
+  const [viewMode, setViewMode] = useState<"cards" | "table" | "grid">("table");
   const { isBlurred } = useCurrencyBlur();
 
   const fetchStocks = useCallback(async () => {
@@ -140,7 +141,7 @@ export default function Home() {
                   variant={viewMode === "cards" ? "secondary" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("cards")}
-                  className="rounded-r-none"
+                  className="rounded-r-none border-r"
                 >
                   <LayoutGrid className="h-4 w-4" />
                 </Button>
@@ -148,9 +149,17 @@ export default function Home() {
                   variant={viewMode === "table" ? "secondary" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("table")}
-                  className="rounded-l-none"
+                  className="rounded-none border-r"
                 >
                   <Table2 className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === "grid" ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className="rounded-l-none"
+                >
+                  <Grid3x3 className="h-4 w-4" />
                 </Button>
               </div>
               <CurrencyBlurToggle />
@@ -217,7 +226,7 @@ export default function Home() {
                   </div>
                 )}
               </>
-            ) : (
+            ) : viewMode === "table" ? (
               <>
                 {/* Portfolio Stocks - Table View */}
                 {portfolioStocks.length > 0 && (
@@ -237,6 +246,63 @@ export default function Home() {
                     onStockDeleted={handleStockDeleted}
                     isWatchlist={true}
                   />
+                )}
+              </>
+            ) : (
+              <>
+                {/* Portfolio Stocks - Grid View */}
+                {portfolioStocks.length > 0 && (
+                  <div>
+                    <div className="grid grid-cols-10 gap-4">
+                      {portfolioStocks.map((stock) => (
+                        <Link
+                          key={stock.id}
+                          href={`/stock/${stock.id}/editor`}
+                          className="flex flex-col items-center gap-2 group cursor-pointer"
+                        >
+                          <div className="w-full aspect-square rounded-lg overflow-hidden bg-muted flex items-center justify-center transition-transform group-hover:scale-105">
+                            <StockLogo
+                              ticker={stock.ticker}
+                              name={stock.name}
+                              size={120}
+                              className="w-full h-full p-2"
+                            />
+                          </div>
+                          <span className="text-xs text-center w-full truncate text-muted-foreground group-hover:text-foreground transition-colors">
+                            {stock.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Watchlist Stocks - Grid View */}
+                {watchlistStocks.length > 0 && (
+                  <div>
+                    <h2 className="text-xl font-semibold mb-4">Watchlist</h2>
+                    <div className="grid grid-cols-10 gap-4">
+                      {watchlistStocks.map((stock) => (
+                        <Link
+                          key={stock.id}
+                          href={`/stock/${stock.id}/editor`}
+                          className="flex flex-col items-center gap-2 group cursor-pointer"
+                        >
+                          <div className="w-full aspect-square rounded-lg overflow-hidden bg-muted flex items-center justify-center transition-transform group-hover:scale-105">
+                            <StockLogo
+                              ticker={stock.ticker}
+                              name={stock.name}
+                              size={64}
+                              className="w-full h-full p-2"
+                            />
+                          </div>
+                          <span className="text-xs text-center w-full truncate text-muted-foreground group-hover:text-foreground transition-colors">
+                            {stock.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </>
             )}
