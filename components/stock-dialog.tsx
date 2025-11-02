@@ -270,20 +270,36 @@ export function StockDialog({
             </>
           )}
           {formData.isWatchlist && (
-            <div className="grid gap-2">
-              <Label htmlFor="priceTarget">Price Target ($)</Label>
-              <Input
-                id="priceTarget"
-                type="number"
-                placeholder="0.00"
-                value={formData.priceTarget}
-                onChange={(e) =>
-                  setFormData({ ...formData, priceTarget: e.target.value })
-                }
-                min="0"
-                step="0.01"
-              />
-            </div>
+            <>
+              <div className="grid gap-2">
+                <Label htmlFor="price">Current Price ($)</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  placeholder="0.00"
+                  value={formData.price}
+                  onChange={(e) =>
+                    setFormData({ ...formData, price: e.target.value })
+                  }
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="priceTarget">Price Target ($)</Label>
+                <Input
+                  id="priceTarget"
+                  type="number"
+                  placeholder="0.00"
+                  value={formData.priceTarget}
+                  onChange={(e) =>
+                    setFormData({ ...formData, priceTarget: e.target.value })
+                  }
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+            </>
           )}
         </div>
         <DialogFooter>

@@ -31,6 +31,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { useCurrencyBlur } from "@/lib/stores/currency-blur-store";
+import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
 
 interface EditorToolbarProps {
   stock: Stock;
@@ -57,6 +59,8 @@ export function EditorToolbar({
   isFavorite = false,
   portfolioTotal = 0,
 }: EditorToolbarProps) {
+  const { isBlurred } = useCurrencyBlur();
+  
   // Calculate financial data
   const shares = stock.shares || 0;
   const price = parseFloat(stock.price || "0");
@@ -65,12 +69,7 @@ export function EditorToolbar({
   const priceTarget = stock.priceTarget;
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
+    return formatCurrencyUtil(value, isBlurred);
   };
 
   // Calculate portfolio percentage

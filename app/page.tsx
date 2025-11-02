@@ -4,15 +4,22 @@ import { useState, useEffect, useCallback } from "react";
 import { Stock } from "@/lib/stock-utils";
 import { StockCard } from "@/components/stock-card";
 import { StockDialog } from "@/components/stock-dialog";
+import { StockTable } from "@/components/stock-table";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { CurrencyBlurToggle } from "@/components/currency-blur-toggle";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Settings } from "lucide-react";
+import { Settings, LayoutGrid, Table2 } from "lucide-react";
+import { DCFCalculatorSheet } from "@/components/dcf-calculator-sheet";
+import { useCurrencyBlur } from "@/lib/stores/currency-blur-store";
+import { formatCurrency } from "@/lib/currency";
 
 export default function Home() {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"cards" | "table">("table");
+  const { isBlurred } = useCurrencyBlur();
 
   const fetchStocks = useCallback(async () => {
     try {
@@ -63,15 +70,6 @@ export default function Home() {
       return sum + shares * price;
     }, 0);
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
@@ -83,6 +81,7 @@ export default function Home() {
                 <Skeleton className="h-5 w-48" />
               </div>
               <div className="flex items-center gap-3">
+                <CurrencyBlurToggle />
                 <ThemeToggle />
                 <Skeleton className="h-10 w-32" />
               </div>
@@ -123,17 +122,42 @@ export default function Home() {
                   <span className="text-sm font-medium text-muted-foreground">
                     Portfolio . {portfolioStocks.length}{" "}
                     {portfolioStocks.length === 1 ? "stock" : "stocks"}
-                    {portfolioTotal > 0 && (
-                      <span className="ml-2">
-                        . {formatCurrency(portfolioTotal)}
-                      </span>
-                    )}
                   </span>
                 )}
               </div>
+              {portfolioTotal > 0 && (
+                <span className="text-3xl text-foreground font-mono">
+                  {formatCurrency(portfolioTotal, isBlurred, {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })}
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-3">
+              <div className="flex items-center border rounded-md">
+                <Button
+                  variant={viewMode === "cards" ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("cards")}
+                  className="rounded-r-none"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === "table" ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("table")}
+                  className="rounded-l-none"
+                >
+                  <Table2 className="h-4 w-4" />
+                </Button>
+              </div>
+              <CurrencyBlurToggle />
               <ThemeToggle />
+
+              {/* DCF HERE */}
+              <DCFCalculatorSheet />
               <Link href="/strategies">
                 <Button variant="ghost" size="sm">
                   <Settings className="h-4 w-4 " />
@@ -156,40 +180,65 @@ export default function Home() {
           </div>
         ) : (
           <div className="space-y-8">
-            {/* Portfolio Stocks */}
-            {portfolioStocks.length > 0 && (
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {portfolioStocks.map((stock) => (
-                    <StockCard
-                      key={stock.id}
-                      stock={stock}
-                      viewMode="editor"
-                      onDelete={handleStockDeleted}
-                      portfolioTotal={portfolioTotal}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+            {viewMode === "cards" ? (
+              <>
+                {/* Portfolio Stocks - Card View */}
+                {portfolioStocks.length > 0 && (
+                  <div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {portfolioStocks.map((stock) => (
+                        <StockCard
+                          key={stock.id}
+                          stock={stock}
+                          viewMode="editor"
+                          onDelete={handleStockDeleted}
+                          portfolioTotal={portfolioTotal}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-            {/* Watchlist Stocks */}
-            {watchlistStocks.length > 0 && (
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Watchlist</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {watchlistStocks.map((stock) => (
-                    <StockCard
-                      key={stock.id}
-                      stock={stock}
-                      viewMode="editor"
-                      onDelete={handleStockDeleted}
-                      portfolioTotal={portfolioTotal}
-                    />
-                  ))}
-                </div>
-              </div>
+                {/* Watchlist Stocks - Card View */}
+                {watchlistStocks.length > 0 && (
+                  <div>
+                    <h2 className="text-xl font-semibold mb-4">Watchlist</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {watchlistStocks.map((stock) => (
+                        <StockCard
+                          key={stock.id}
+                          stock={stock}
+                          viewMode="editor"
+                          onDelete={handleStockDeleted}
+                          portfolioTotal={portfolioTotal}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                {/* Portfolio Stocks - Table View */}
+                {portfolioStocks.length > 0 && (
+                  <StockTable
+                    stocks={portfolioStocks}
+                    portfolioTotal={portfolioTotal}
+                    onStockDeleted={handleStockDeleted}
+                  />
+                )}
+
+                {/* Watchlist Stocks - Table View */}
+                {watchlistStocks.length > 0 && (
+                  <StockTable
+                    stocks={watchlistStocks}
+                    title="Watchlist"
+                    portfolioTotal={portfolioTotal}
+                    onStockDeleted={handleStockDeleted}
+                    isWatchlist={true}
+                  />
+                )}
+              </>
             )}
           </div>
         )}

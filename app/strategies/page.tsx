@@ -36,6 +36,7 @@ import {
   Coins,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { CurrencyBlurToggle } from "@/components/currency-blur-toggle";
 
 interface InvestmentStrategy {
   id: string;
@@ -213,7 +214,10 @@ export default function StrategiesPage() {
               <h1 className="text-3xl font-extralight uppercase font-mono">
                 Investment Strategies
               </h1>
-              <ThemeToggle />
+              <div className="flex items-center gap-3">
+                <CurrencyBlurToggle />
+                <ThemeToggle />
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -249,6 +253,7 @@ export default function StrategiesPage() {
               </p>
             </div>
             <div className="flex items-center gap-3">
+              <CurrencyBlurToggle />
               <ThemeToggle />
               <Dialog
                 open={showCreateDialog}

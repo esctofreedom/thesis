@@ -45,6 +45,8 @@ import {
   Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCurrencyBlur } from "@/lib/stores/currency-blur-store";
+import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
 
 interface StockCardProps {
   stock: Stock;
@@ -59,6 +61,7 @@ export function StockCard({
   onDelete,
   portfolioTotal = 0,
 }: StockCardProps) {
+  const { isBlurred } = useCurrencyBlur();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -128,12 +131,7 @@ export function StockCard({
   };
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
+    return formatCurrencyUtil(value, isBlurred);
   };
 
   // Calculate portfolio percentage for this stock
